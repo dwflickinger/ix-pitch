@@ -1,0 +1,869 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IX Medsolutions — Agentic Case Coverage</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap');
+
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --bg: #0a0b0f;
+    --bg2: #12141c;
+    --bg3: #1a1d2a;
+    --surface: #1e2132;
+    --border: #2a2d3e;
+    --text: #e4e6f0;
+    --text-dim: #8b8fa4;
+    --text-bright: #ffffff;
+    --accent: #4f7cff;
+    --accent2: #7c5cff;
+    --green: #34d399;
+    --amber: #fbbf24;
+    --red: #f87171;
+    --teal: #2dd4bf;
+    --gradient: linear-gradient(135deg, #4f7cff 0%, #7c5cff 50%, #c084fc 100%);
+    --gradient2: linear-gradient(135deg, #2dd4bf 0%, #4f7cff 100%);
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Inter', -apple-system, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+
+  /* Animations */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(40px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  @keyframes slideRight {
+    from { opacity: 0; transform: translateX(-30px); }
+    to { opacity: 1; transform: translateX(0); }
+  }
+  @keyframes pulse-ring {
+    0% { box-shadow: 0 0 0 0 rgba(79, 124, 255, 0.4); }
+    70% { box-shadow: 0 0 0 15px rgba(79, 124, 255, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(79, 124, 255, 0); }
+  }
+  @keyframes typing {
+    0%, 60% { width: 0; }
+    100% { width: 100%; }
+  }
+  @keyframes blink {
+    50% { border-color: transparent; }
+  }
+  @keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+  }
+  @keyframes gradient-shift {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+  @keyframes message-in {
+    from { opacity: 0; transform: translateY(20px) scale(0.95); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
+  }
+
+  .reveal { opacity: 0; transform: translateY(40px); transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1); }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+  .reveal-delay-1 { transition-delay: 0.15s; }
+  .reveal-delay-2 { transition-delay: 0.3s; }
+  .reveal-delay-3 { transition-delay: 0.45s; }
+  .reveal-delay-4 { transition-delay: 0.6s; }
+
+  /* Layout */
+  .container { max-width: 1100px; margin: 0 auto; padding: 0 24px; }
+  section { padding: 100px 0; }
+
+  /* Nav */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    background: rgba(10, 11, 15, 0.85);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--border);
+    padding: 16px 0;
+  }
+  nav .container { display: flex; align-items: center; justify-content: space-between; }
+  .logo {
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 700; font-size: 1.3rem;
+    background: var(--gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .logo span { font-weight: 400; -webkit-text-fill-color: var(--text-dim); color: var(--text-dim); }
+  .nav-links { display: flex; gap: 28px; }
+  .nav-links a { color: var(--text-dim); text-decoration: none; font-size: 0.85rem; font-weight: 500; transition: color 0.2s; }
+  .nav-links a:hover { color: var(--text-bright); }
+
+  /* Hero */
+  .hero {
+    min-height: 100vh; display: flex; align-items: center; justify-content: center;
+    text-align: center; position: relative; overflow: hidden; padding-top: 80px;
+  }
+  .hero::before {
+    content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%;
+    background: radial-gradient(circle at 30% 40%, rgba(79, 124, 255, 0.08) 0%, transparent 50%),
+                radial-gradient(circle at 70% 60%, rgba(124, 92, 255, 0.06) 0%, transparent 50%);
+    animation: gradient-shift 15s ease infinite;
+    background-size: 200% 200%;
+  }
+  .hero-content { position: relative; z-index: 1; max-width: 800px; }
+  .hero-badge {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: var(--surface); border: 1px solid var(--border);
+    padding: 6px 16px; border-radius: 100px; font-size: 0.8rem; color: var(--teal);
+    margin-bottom: 32px; animation: fadeIn 1s ease;
+  }
+  .hero-badge .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--teal); animation: pulse-ring 2s infinite; }
+  .hero h1 {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: clamp(2.5rem, 6vw, 4.2rem); font-weight: 800;
+    line-height: 1.1; margin-bottom: 24px;
+    animation: fadeUp 1s ease 0.2s both;
+  }
+  .hero h1 .gradient-text {
+    background: var(--gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+  }
+  .hero p {
+    font-size: 1.15rem; color: var(--text-dim); max-width: 600px; margin: 0 auto 40px;
+    animation: fadeUp 1s ease 0.4s both;
+  }
+  .hero-stats {
+    display: flex; justify-content: center; gap: 48px;
+    animation: fadeUp 1s ease 0.6s both;
+  }
+  .hero-stat .number {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 2rem; font-weight: 700; color: var(--text-bright);
+  }
+  .hero-stat .label { font-size: 0.75rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 1px; }
+
+  /* Section headers */
+  .section-label {
+    font-size: 0.7rem; text-transform: uppercase; letter-spacing: 2px;
+    color: var(--accent); font-weight: 600; margin-bottom: 12px;
+  }
+  .section-title {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: clamp(1.8rem, 4vw, 2.6rem); font-weight: 700;
+    line-height: 1.2; margin-bottom: 16px; color: var(--text-bright);
+  }
+  .section-subtitle { font-size: 1.05rem; color: var(--text-dim); max-width: 600px; }
+
+  /* Problem/Solution */
+  .problem-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-top: 48px;
+  }
+  .problem-card, .solution-card {
+    background: var(--bg2); border: 1px solid var(--border); border-radius: 16px;
+    padding: 32px; transition: transform 0.3s, border-color 0.3s;
+  }
+  .problem-card:hover, .solution-card:hover { transform: translateY(-4px); border-color: var(--accent); }
+  .problem-card .icon, .solution-card .icon { font-size: 2rem; margin-bottom: 16px; }
+  .problem-card h3, .solution-card h3 { font-weight: 600; margin-bottom: 8px; color: var(--text-bright); font-size: 1.1rem; }
+  .problem-card p, .solution-card p { color: var(--text-dim); font-size: 0.9rem; }
+  .problem-card { border-left: 3px solid var(--red); }
+  .solution-card { border-left: 3px solid var(--green); }
+
+  /* WhatsApp Demo */
+  .chat-demo {
+    background: var(--bg2); border: 1px solid var(--border); border-radius: 20px;
+    overflow: hidden; max-width: 420px; margin: 48px auto 0;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+  }
+  .chat-header {
+    background: #075e54; padding: 14px 16px; display: flex; align-items: center; gap: 12px;
+  }
+  .chat-avatar {
+    width: 36px; height: 36px; border-radius: 50%; background: var(--gradient);
+    display: flex; align-items: center; justify-content: center; font-size: 1rem;
+  }
+  .chat-header-text { flex: 1; }
+  .chat-header-text .name { color: white; font-weight: 600; font-size: 0.9rem; }
+  .chat-header-text .status { color: rgba(255,255,255,0.6); font-size: 0.7rem; }
+  .chat-body {
+    padding: 16px; min-height: 360px;
+    background: #0b141a url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.02'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    display: flex; flex-direction: column; gap: 8px;
+  }
+  .msg {
+    max-width: 85%; padding: 8px 12px; border-radius: 8px; font-size: 0.85rem;
+    line-height: 1.4; position: relative; opacity: 0;
+  }
+  .msg.visible { animation: message-in 0.4s ease forwards; }
+  .msg-in { background: #202c33; color: #e9edef; align-self: flex-start; border-top-left-radius: 0; }
+  .msg-out { background: #005c4b; color: #e9edef; align-self: flex-end; border-top-right-radius: 0; }
+  .msg .time { font-size: 0.6rem; color: rgba(255,255,255,0.4); margin-top: 4px; text-align: right; }
+  .msg .sender { font-size: 0.7rem; color: var(--teal); font-weight: 600; margin-bottom: 2px; }
+  .msg img { max-width: 100%; border-radius: 6px; margin: 4px 0; }
+  .msg-photo { width: 200px; height: 140px; background: var(--bg3); border-radius: 6px; margin: 4px 0; display: flex; align-items: center; justify-content: center; color: var(--text-dim); font-size: 2.5rem; }
+
+  /* Persona sections */
+  .persona-section { display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: center; margin-top: 60px; }
+  .persona-section.reverse { direction: rtl; }
+  .persona-section.reverse > * { direction: ltr; }
+  .persona-content { }
+  .persona-icon { font-size: 3rem; margin-bottom: 16px; }
+  .persona-title { font-family: 'Space Grotesk', sans-serif; font-size: 1.6rem; font-weight: 700; color: var(--text-bright); margin-bottom: 8px; }
+  .persona-role { color: var(--accent); font-size: 0.85rem; font-weight: 600; margin-bottom: 16px; text-transform: uppercase; letter-spacing: 1px; }
+  .persona-content p { color: var(--text-dim); margin-bottom: 20px; font-size: 0.95rem; }
+
+  .feature-list { list-style: none; display: flex; flex-direction: column; gap: 12px; }
+  .feature-list li {
+    display: flex; align-items: flex-start; gap: 12px; font-size: 0.9rem;
+    padding: 12px 16px; background: var(--bg2); border-radius: 12px; border: 1px solid var(--border);
+  }
+  .feature-list .icon { font-size: 1.2rem; flex-shrink: 0; margin-top: 1px; }
+  .feature-list .text { }
+  .feature-list strong { color: var(--text-bright); }
+
+  /* Comparison */
+  .compare-table {
+    width: 100%; border-collapse: separate; border-spacing: 0;
+    margin-top: 48px; border-radius: 16px; overflow: hidden;
+    border: 1px solid var(--border);
+  }
+  .compare-table th {
+    background: var(--bg3); padding: 16px 24px; text-align: left;
+    font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; color: var(--text-dim);
+    border-bottom: 1px solid var(--border);
+  }
+  .compare-table th:last-child { color: var(--accent); }
+  .compare-table td {
+    padding: 14px 24px; border-bottom: 1px solid var(--border); font-size: 0.9rem;
+  }
+  .compare-table tr:last-child td { border-bottom: none; }
+  .compare-table td:first-child { color: var(--text-dim); font-weight: 500; }
+  .compare-table td:nth-child(2) { color: var(--red); }
+  .compare-table td:last-child { color: var(--green); font-weight: 500; }
+
+  /* Timeline */
+  .timeline { position: relative; margin-top: 48px; padding-left: 40px; }
+  .timeline::before { content: ''; position: absolute; left: 15px; top: 0; bottom: 0; width: 2px; background: var(--border); }
+  .timeline-item { position: relative; margin-bottom: 36px; }
+  .timeline-item::before {
+    content: ''; position: absolute; left: -33px; top: 6px;
+    width: 12px; height: 12px; border-radius: 50%;
+    background: var(--accent); border: 3px solid var(--bg);
+  }
+  .timeline-item.active::before { background: var(--green); box-shadow: 0 0 10px rgba(52, 211, 153, 0.4); }
+  .timeline-item h4 { font-weight: 600; color: var(--text-bright); margin-bottom: 4px; }
+  .timeline-item .date { font-size: 0.75rem; color: var(--accent); font-weight: 600; margin-bottom: 4px; }
+  .timeline-item p { color: var(--text-dim); font-size: 0.85rem; }
+
+  /* Metrics */
+  .metrics-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; margin-top: 48px; }
+  .metric-card {
+    background: var(--bg2); border: 1px solid var(--border); border-radius: 16px;
+    padding: 28px; text-align: center; transition: transform 0.3s;
+  }
+  .metric-card:hover { transform: translateY(-4px); }
+  .metric-card .value {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 2.4rem; font-weight: 700;
+    background: var(--gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+  }
+  .metric-card .label { color: var(--text-dim); font-size: 0.8rem; margin-top: 4px; }
+
+  /* Architecture */
+  .arch-flow {
+    display: flex; align-items: center; justify-content: center; gap: 0;
+    margin: 48px 0; flex-wrap: wrap;
+  }
+  .arch-node {
+    background: var(--bg2); border: 1px solid var(--border); border-radius: 16px;
+    padding: 20px 24px; text-align: center; min-width: 140px;
+    transition: border-color 0.3s, transform 0.3s;
+  }
+  .arch-node:hover { border-color: var(--accent); transform: scale(1.05); }
+  .arch-node .icon { font-size: 2rem; margin-bottom: 8px; }
+  .arch-node .name { font-weight: 600; font-size: 0.85rem; color: var(--text-bright); }
+  .arch-node .desc { font-size: 0.7rem; color: var(--text-dim); margin-top: 2px; }
+  .arch-arrow { font-size: 1.5rem; color: var(--text-dim); padding: 0 8px; }
+
+  /* Footer */
+  footer {
+    border-top: 1px solid var(--border); padding: 48px 0; text-align: center;
+  }
+  footer p { color: var(--text-dim); font-size: 0.85rem; }
+  footer .logo-footer { font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 1.5rem; margin-bottom: 12px; background: var(--gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+
+  /* Responsive */
+  @media (max-width: 768px) {
+    .problem-grid { grid-template-columns: 1fr; }
+    .persona-section, .persona-section.reverse { grid-template-columns: 1fr; gap: 32px; }
+    .hero-stats { flex-direction: column; gap: 20px; }
+    .metrics-grid { grid-template-columns: 1fr 1fr; }
+    .nav-links { display: none; }
+    .arch-flow { flex-direction: column; }
+    .arch-arrow { transform: rotate(90deg); }
+    .compare-table { font-size: 0.8rem; }
+    .compare-table td, .compare-table th { padding: 10px 12px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Nav -->
+<nav>
+  <div class="container">
+    <div class="logo">IX <span>Medsolutions</span></div>
+    <div class="nav-links">
+      <a href="#vision">Vision</a>
+      <a href="#experience">Experience</a>
+      <a href="#facility">Facilities</a>
+      <a href="#architecture">How It Works</a>
+      <a href="#roadmap">Roadmap</a>
+    </div>
+  </div>
+</nav>
+
+<!-- Hero -->
+<section class="hero">
+  <div class="hero-content">
+    <div class="hero-badge"><span class="dot"></span> Powered by Agentic AI</div>
+    <h1>
+      The Future of<br>
+      <span class="gradient-text">Surgical Case Coverage</span>
+    </h1>
+    <p>
+      IX Medsolutions is reimagining how surgical implants are managed, tracked, and billed — replacing spreadsheets and portals with an AI agent that handles everything through a simple text message.
+    </p>
+    <div class="hero-stats">
+      <div class="hero-stat">
+        <div class="number">60s</div>
+        <div class="label">Case Submission</div>
+      </div>
+      <div class="hero-stat">
+        <div class="number">Zero</div>
+        <div class="label">Portals to Learn</div>
+      </div>
+      <div class="hero-stat">
+        <div class="number">100%</div>
+        <div class="label">Auto-Documented</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- The Problem -->
+<section id="vision" style="background: var(--bg2);">
+  <div class="container">
+    <div class="section-label reveal">The Problem</div>
+    <div class="section-title reveal">Every SaaS Product Is a Means to an End</div>
+    <div class="section-subtitle reveal">
+      Surgery centers don't want another login. Reps don't want another form to fill out. They want answers and deliverables — instantly, on the device they already use.
+    </div>
+
+    <div class="problem-grid">
+      <div class="problem-card reveal reveal-delay-1">
+        <div class="icon">📋</div>
+        <h3>Reps Hate Data Entry</h3>
+        <p>Your coverage rep just spent 4 hours standing in an OR. Now you want them to sit down, open a laptop, navigate a 3-step form, and type carefully. That's not realistic.</p>
+      </div>
+      <div class="problem-card reveal reveal-delay-2">
+        <div class="icon">🏥</div>
+        <h3>Facilities Want Answers, Not Dashboards</h3>
+        <p>"What's our outstanding balance?" shouldn't require a login, a password reset, and 4 clicks through a portal. It should be a text message with an instant answer.</p>
+      </div>
+      <div class="problem-card reveal reveal-delay-3">
+        <div class="icon">📄</div>
+        <h3>Documents Are Manual</h3>
+        <p>Invoices, POs, usage forms, commission ledgers — all created by hand, hours or days after surgery. Every delay is lost revenue and operational friction.</p>
+      </div>
+      <div class="problem-card reveal reveal-delay-4">
+        <div class="icon">🔮</div>
+        <h3>No Institutional Memory</h3>
+        <p>When a new rep covers Dr. Smith's TLIF, they're flying blind. What cage size? What screw length? What does he always ask for? That knowledge lives in someone's head, not a system.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- The Solution -->
+<section>
+  <div class="container">
+    <div class="section-label reveal">The Solution</div>
+    <div class="section-title reveal">One Agent. Every Audience.<br><span class="gradient-text" style="font-family: 'Space Grotesk';">Deliverables, Not Dashboards.</span></div>
+    <div class="section-subtitle reveal">
+      The product isn't a web app. It's an AI agent with a phone number. Different people text the same number and get different experiences based on who they are.
+    </div>
+
+    <div class="problem-grid" style="margin-top: 48px;">
+      <div class="solution-card reveal reveal-delay-1">
+        <div class="icon">🔧</div>
+        <h3>Coverage Reps</h3>
+        <p>Submit cases with a photo of implant labels or a 30-second voice note. Get morning briefings with surgeon preferences and locker inventory. No app required.</p>
+      </div>
+      <div class="solution-card reveal reveal-delay-2">
+        <div class="icon">🏢</div>
+        <h3>Facility Admins</h3>
+        <p>"What's our outstanding balance?" → instant answer. "Approve last week's invoices" → done. "What has IX saved us this year?" → branded PDF delivered in the chat.</p>
+      </div>
+      <div class="solution-card reveal reveal-delay-3">
+        <div class="icon">🏭</div>
+        <h3>Vendors</h3>
+        <p>"How many cages were used last month?" → usage report. "What do you owe us?" → itemized commission summary. Monthly reconciliation delivered automatically.</p>
+      </div>
+      <div class="solution-card reveal reveal-delay-4">
+        <div class="icon">📊</div>
+        <h3>Executive Team</h3>
+        <p>"P&L for February across all facilities" → generated on the fly. Weekly executive summaries, margin analysis, and AR aging — all delivered proactively.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Rep Experience -->
+<section id="experience" style="background: var(--bg2);">
+  <div class="container">
+    <div class="section-label reveal">The Rep Experience</div>
+    <div class="section-title reveal">From Scrubs to Submitted in 60 Seconds</div>
+    <div class="section-subtitle reveal">
+      Your rep just finished covering a spine case. Here's what happens next.
+    </div>
+
+    <div class="persona-section reveal">
+      <div class="persona-content">
+        <div class="persona-icon">📸</div>
+        <div class="persona-title">Snap. Send. Done.</div>
+        <div class="persona-role">Case Submission</div>
+        <p>The rep takes a photo of the implant stickers laid out on the back table. Sends it to the IX number. AI identifies every product, matches to the catalog, and creates the case record.</p>
+        <ul class="feature-list">
+          <li><span class="icon">📷</span><span class="text"><strong>Photo Recognition</strong> — AI reads implant labels, barcodes, and lot numbers from a single photo</span></li>
+          <li><span class="icon">🎙️</span><span class="text"><strong>Voice Notes</strong> — "Just finished Roh's TLIF, used the 12x26 cage, 4 screws, BMP small" → parsed automatically</span></li>
+          <li><span class="icon">✅</span><span class="text"><strong>Smart Confirmation</strong> — "Got it. 6 items logged. Anything I missed?" → Rep replies "add the graft funnel" → Done</span></li>
+        </ul>
+      </div>
+      <div>
+        <!-- WhatsApp Demo -->
+        <div class="chat-demo" id="chat-demo-1">
+          <div class="chat-header">
+            <div class="chat-avatar">🤖</div>
+            <div class="chat-header-text">
+              <div class="name">IX Case Agent</div>
+              <div class="status">online</div>
+            </div>
+          </div>
+          <div class="chat-body" id="chat-body-1">
+            <div class="msg msg-out" style="animation-delay: 0.5s;">
+              <div class="msg-photo">📸</div>
+              <div class="time">2:47 PM</div>
+            </div>
+            <div class="msg msg-in" style="animation-delay: 1.5s;">
+              <div>📋 <strong>Case Summary</strong></div>
+              <div style="margin-top:4px;">👤 JM | 🗓️ Mar 13</div>
+              <div>👨‍⚕️ Dr. Roh | 🏥 HSC</div>
+              <div style="margin-top:4px;">📦 <strong>5 items:</strong></div>
+              <div style="font-size:0.8rem; margin-top:2px;">1. Cuvis Cage 12x26 — $1,800</div>
+              <div style="font-size:0.8rem;">2. 4x Pedicle Screws 6.5x45 — $1,440</div>
+              <div style="font-size:0.8rem;">3. BMP Small Kit — $960</div>
+              <div style="margin-top:4px;">💰 <strong>Total: $4,200</strong></div>
+              <div style="margin-top:6px;">Reply <strong>YES</strong> to submit</div>
+              <div class="time">2:47 PM</div>
+            </div>
+            <div class="msg msg-out" style="animation-delay: 3s;">
+              <div>yes</div>
+              <div class="time">2:48 PM</div>
+            </div>
+            <div class="msg msg-in" style="animation-delay: 4s;">
+              <div>✅ <strong>Case submitted!</strong></div>
+              <div style="margin-top:4px;">📄 Invoice + POs auto-generated</div>
+              <div>📧 Facility notified</div>
+              <div>📦 Inventory updated</div>
+              <div class="time">2:48 PM</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Morning Briefing -->
+    <div class="persona-section reverse reveal" style="margin-top: 80px;">
+      <div class="persona-content">
+        <div class="persona-icon">🌅</div>
+        <div class="persona-title">Morning Intelligence Briefing</div>
+        <div class="persona-role">Proactive Case Prep</div>
+        <p>Every morning at 7am, the agent sends each rep their daily briefing — what cases they're covering, what each surgeon typically uses, and whether the products are in the facility locker.</p>
+        <ul class="feature-list">
+          <li><span class="icon">🧠</span><span class="text"><strong>Surgeon Preference Cards</strong> — auto-learned from case history. "Dr. Roh always uses 6.5x45 screws and BMP small for TLIFs"</span></li>
+          <li><span class="icon">📦</span><span class="text"><strong>Inventory Check</strong> — confirms products are in the locker. Flags shortages before you arrive.</span></li>
+          <li><span class="icon">⏰</span><span class="text"><strong>EOD Nudge</strong> — if a case hasn't been submitted by 6pm, gentle reminder to the rep</span></li>
+        </ul>
+      </div>
+      <div>
+        <div class="chat-demo">
+          <div class="chat-header">
+            <div class="chat-avatar">🤖</div>
+            <div class="chat-header-text">
+              <div class="name">IX Case Agent</div>
+              <div class="status">7:00 AM</div>
+            </div>
+          </div>
+          <div class="chat-body">
+            <div class="msg msg-in visible">
+              <div>🌅 Good morning, DJ!</div>
+              <div style="margin-top:6px;">You have <strong>2 cases</strong> today:</div>
+              <div style="margin-top:8px;">1️⃣ <strong>9:00 AM</strong> — Dr. Roh</div>
+              <div style="font-size:0.8rem;">TLIF L4-L5 @ Honolulu Spine Center</div>
+              <div style="font-size:0.8rem;">📦 Cuvis cage 12x26, 4x screws 6.5x45, BMP small</div>
+              <div style="font-size:0.8rem;">✅ All items confirmed in locker</div>
+              <div style="margin-top:8px;">2️⃣ <strong>1:00 PM</strong> — Dr. Tada</div>
+              <div style="font-size:0.8rem;">ACDF C5-C6 @ Honolulu Spine Center</div>
+              <div style="font-size:0.8rem;">📦 Zero-profile plate, PEEK cage 6mm</div>
+              <div style="font-size:0.8rem;">⚠️ PEEK cage 6mm — only 1 left (reorder triggered)</div>
+              <div class="time">7:00 AM</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Facility Experience -->
+<section id="facility">
+  <div class="container">
+    <div class="section-label reveal">The Facility Experience</div>
+    <div class="section-title reveal">Text a Question. Get a Deliverable.</div>
+    <div class="section-subtitle reveal">
+      Surgery center administrators interact with IX through the same channel — no portal, no login, no training required.
+    </div>
+
+    <div class="persona-section reveal" style="margin-top: 48px;">
+      <div class="persona-content">
+        <div class="persona-icon">🏥</div>
+        <div class="persona-title">Instant Answers, Real Documents</div>
+        <div class="persona-role">Materials Management</div>
+        <p>The facility admin texts the IX number with a question. The agent knows who they are, scopes all data to their facility, and delivers finished work products — PDFs, summaries, reports — right in the chat.</p>
+        <ul class="feature-list">
+          <li><span class="icon">💰</span><span class="text"><strong>"What's our outstanding balance?"</strong> → $12,400 across 3 invoices. Want a PDF summary?</span></li>
+          <li><span class="icon">📦</span><span class="text"><strong>"What's expiring in our locker?"</strong> → 2 items within 60 days: BMP kit (Apr 2), Allograft (May 15)</span></li>
+          <li><span class="icon">✅</span><span class="text"><strong>"Approve last week's invoices"</strong> → Done. 3 invoices approved, $11,500 total.</span></li>
+          <li><span class="icon">📊</span><span class="text"><strong>"How much has IX saved us this year?"</strong> → Branded PDF report for your board, delivered in 30 seconds</span></li>
+        </ul>
+      </div>
+      <div>
+        <div class="chat-demo">
+          <div class="chat-header">
+            <div class="chat-avatar">🤖</div>
+            <div class="chat-header-text">
+              <div class="name">IX Case Agent</div>
+              <div class="status">online</div>
+            </div>
+          </div>
+          <div class="chat-body">
+            <div class="msg msg-out visible">
+              <div>How much has IX saved us this year? I need it for a board presentation</div>
+              <div class="time">10:15 AM</div>
+            </div>
+            <div class="msg msg-in visible" style="animation-delay: 0.4s;">
+              <div>📊 <strong>Honolulu Spine Center — 2026 Savings Report</strong></div>
+              <div style="margin-top:6px;">Total savings YTD: <strong style="color: #34d399;">$127,400</strong></div>
+              <div style="font-size:0.8rem; margin-top:4px;">• Spinal implants: $89,200 saved</div>
+              <div style="font-size:0.8rem;">• Biologics: $28,100 saved</div>
+              <div style="font-size:0.8rem;">• Instrumentation: $10,100 saved</div>
+              <div style="margin-top:8px;">📎 Generating your board-ready PDF...</div>
+              <div class="time">10:15 AM</div>
+            </div>
+            <div class="msg msg-in visible" style="animation-delay: 0.8s;">
+              <div>📄 <em>IX_Savings_Report_HSC_2026.pdf</em></div>
+              <div style="font-size:0.8rem; margin-top:4px;">Branded report with quarterly breakdown, surgeon-level analysis, and comparison to list pricing. Ready to present.</div>
+              <div class="time">10:16 AM</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Proactive Deliverables -->
+    <div style="margin-top: 80px;">
+      <h3 class="reveal" style="font-family: 'Space Grotesk'; font-size: 1.4rem; font-weight: 700; color: var(--text-bright); margin-bottom: 24px;">Automated Deliverables — No One Has to Ask</h3>
+      <div class="problem-grid">
+        <div class="solution-card reveal reveal-delay-1">
+          <div class="icon">📬</div>
+          <h3>Monthly Statements</h3>
+          <p>1st of every month: itemized statement with all cases, invoices, payments, and outstanding balance. Delivered via email with PDF attached.</p>
+        </div>
+        <div class="solution-card reveal reveal-delay-2">
+          <div class="icon">📈</div>
+          <h3>Quarterly Savings Reports</h3>
+          <p>Board-ready PDF comparing IX pricing to list pricing. Broken down by product category, surgeon, and quarter. The retention weapon.</p>
+        </div>
+        <div class="solution-card reveal reveal-delay-3">
+          <div class="icon">🔔</div>
+          <h3>Inventory Alerts</h3>
+          <p>Products expiring within 60 days, stock below par levels, reorder confirmations — pushed to facility contacts automatically.</p>
+        </div>
+        <div class="solution-card reveal reveal-delay-4">
+          <div class="icon">💰</div>
+          <h3>Commission Reconciliation</h3>
+          <p>Monthly commission reports to vendors with case-level detail. Eliminates disputes and accelerates payment cycles.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Before & After -->
+<section style="background: var(--bg2);">
+  <div class="container">
+    <div class="section-label reveal">The Transformation</div>
+    <div class="section-title reveal">Before IX vs. With IX</div>
+
+    <table class="compare-table reveal">
+      <thead>
+        <tr>
+          <th>Workflow</th>
+          <th>Traditional</th>
+          <th>With IX Agent</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Case submission</td>
+          <td>Open laptop, log in, fill 3-step form — 15 min</td>
+          <td>Send photo via WhatsApp — 60 seconds</td>
+        </tr>
+        <tr>
+          <td>Document generation</td>
+          <td>Manual creation, hours later</td>
+          <td>Auto-generated on case close, instantly</td>
+        </tr>
+        <tr>
+          <td>Surgeon prep</td>
+          <td>"What did we use last time?" → call someone</td>
+          <td>AI briefing at 7am with full history</td>
+        </tr>
+        <tr>
+          <td>Invoice inquiry</td>
+          <td>Log into portal, navigate, search</td>
+          <td>"What do we owe?" → instant answer</td>
+        </tr>
+        <tr>
+          <td>Inventory check</td>
+          <td>Physical count or spreadsheet</td>
+          <td>Real-time, auto-updated every case</td>
+        </tr>
+        <tr>
+          <td>Savings reporting</td>
+          <td>Manual Excel, days of work</td>
+          <td>"Generate savings report" → PDF in 30 sec</td>
+        </tr>
+        <tr>
+          <td>New facility onboarding</td>
+          <td>Weeks of setup, training, meetings</td>
+          <td>AI learns patterns within first 10 cases</td>
+        </tr>
+        <tr>
+          <td>Unsubmitted cases</td>
+          <td>Discovered days later, maybe never</td>
+          <td>Auto-nudge at 6pm same day</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- Architecture -->
+<section id="architecture">
+  <div class="container">
+    <div class="section-label reveal">How It Works</div>
+    <div class="section-title reveal">One Agent. Multiple Channels. Shared Intelligence.</div>
+    <div class="section-subtitle reveal">
+      Every interaction — from every audience — flows through a single AI agent backed by a unified data layer.
+    </div>
+
+    <div class="arch-flow reveal">
+      <div class="arch-node">
+        <div class="icon">📱</div>
+        <div class="name">WhatsApp</div>
+        <div class="desc">Reps & Facilities</div>
+      </div>
+      <div class="arch-arrow">→</div>
+      <div class="arch-node" style="border-color: var(--accent);">
+        <div class="icon">🧠</div>
+        <div class="name">IX Agent</div>
+        <div class="desc">AI Brain</div>
+      </div>
+      <div class="arch-arrow">→</div>
+      <div class="arch-node">
+        <div class="icon">🗄️</div>
+        <div class="name">CaseReady</div>
+        <div class="desc">Data Layer</div>
+      </div>
+      <div class="arch-arrow">→</div>
+      <div class="arch-node">
+        <div class="icon">📄</div>
+        <div class="name">Deliverables</div>
+        <div class="desc">PDFs, Reports</div>
+      </div>
+    </div>
+
+    <div class="metrics-grid reveal">
+      <div class="metric-card">
+        <div class="value">6</div>
+        <div class="label">Specialized AI Skills</div>
+      </div>
+      <div class="metric-card">
+        <div class="value">3</div>
+        <div class="label">Input Methods</div>
+      </div>
+      <div class="metric-card">
+        <div class="value">8</div>
+        <div class="label">Auto-Generated Docs</div>
+      </div>
+      <div class="metric-card">
+        <div class="value">24/7</div>
+        <div class="label">Always Available</div>
+      </div>
+    </div>
+
+    <!-- Agent Skills -->
+    <div style="margin-top: 64px;">
+      <h3 class="reveal" style="font-family: 'Space Grotesk'; font-size: 1.4rem; font-weight: 700; color: var(--text-bright); margin-bottom: 24px; text-align: center;">Agent Skill Modules</h3>
+      <div class="problem-grid">
+        <div class="solution-card reveal reveal-delay-1">
+          <div class="icon">📸</div>
+          <h3>Case Capture</h3>
+          <p>Photo, voice, or text → product identification → case record. Cross-references catalog, surgeon preferences, and inventory in real-time.</p>
+        </div>
+        <div class="solution-card reveal reveal-delay-2">
+          <div class="icon">📄</div>
+          <h3>Document Engine</h3>
+          <p>Auto-generates invoices, POs, facility POs, usage forms, commission ledger entries, and replenishment requests. All as branded PDFs.</p>
+        </div>
+        <div class="solution-card reveal reveal-delay-3">
+          <div class="icon">🧠</div>
+          <h3>Surgeon Intelligence</h3>
+          <p>Auto-learns what each surgeon uses for each procedure. Predicts product needs for upcoming cases. Generates scouting reports for new reps.</p>
+        </div>
+        <div class="solution-card reveal reveal-delay-4">
+          <div class="icon">📦</div>
+          <h3>Inventory Management</h3>
+          <p>Real-time consignment tracking. Auto-decrement on case close. Par level monitoring. Expiration alerts. Automatic replenishment triggers.</p>
+        </div>
+        <div class="solution-card reveal reveal-delay-1">
+          <div class="icon">💰</div>
+          <h3>Billing & Reconciliation</h3>
+          <p>Invoice queries and approvals via chat. Payment matching. Commission calculations. Dispute flagging. Monthly AR aging reports.</p>
+        </div>
+        <div class="solution-card reveal reveal-delay-2">
+          <div class="icon">📊</div>
+          <h3>Executive Intelligence</h3>
+          <p>P&L by facility. Rep productivity metrics. Margin analysis. Cash flow projections. Weekly executive summaries delivered automatically.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Roadmap -->
+<section id="roadmap" style="background: var(--bg2);">
+  <div class="container">
+    <div class="section-label reveal">Roadmap</div>
+    <div class="section-title reveal">Building the Future of Surgical Supply Chain</div>
+    <div class="section-subtitle reveal">
+      From 2 surgery centers to 20 — powered by AI that scales with the business.
+    </div>
+
+    <div class="timeline reveal">
+      <div class="timeline-item active">
+        <div class="date">NOW — Q1 2026</div>
+        <h4>Foundation + Case Capture</h4>
+        <p>AI agent deployed on WhatsApp. Photo/voice case submission. Surgeon preference card auto-learning. Morning briefings. Document auto-generation.</p>
+      </div>
+      <div class="timeline-item">
+        <div class="date">Q2 2026</div>
+        <h4>Facility Intelligence</h4>
+        <p>Facility admin experience live. Invoice approvals via chat. Real-time inventory visibility. Savings reports on demand. Monthly automated deliverables.</p>
+      </div>
+      <div class="timeline-item">
+        <div class="date">Q3 2026</div>
+        <h4>Vendor + Executive Layer</h4>
+        <p>Vendor commission reports and reconciliation. Executive P&L dashboards via Discord. AR aging alerts. Multi-facility analytics.</p>
+      </div>
+      <div class="timeline-item">
+        <div class="date">Q4 2026</div>
+        <h4>Scale to 10+ Facilities</h4>
+        <p>Automated facility onboarding (AI learns patterns within 10 cases). Rep training via CoverIQ clinical intelligence. Predictive inventory ordering based on surgical schedules.</p>
+      </div>
+      <div class="timeline-item">
+        <div class="date">2027</div>
+        <h4>Autonomous Operations</h4>
+        <p>The agent runs the business day-to-day. Humans handle relationships, exceptions, and strategy. Full agentic case coverage across 20+ surgery centers.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA / Footer -->
+<section style="text-align: center; padding: 120px 0;">
+  <div class="container">
+    <div class="section-title reveal" style="max-width: 700px; margin: 0 auto;">
+      The product isn't software.<br>
+      <span class="gradient-text" style="font-family: 'Space Grotesk';">The product is an agent that does work.</span>
+    </div>
+    <p class="reveal" style="color: var(--text-dim); margin-top: 16px; font-size: 1.05rem; max-width: 500px; margin-left: auto; margin-right: auto;">
+      IX Medsolutions is building the future of surgical supply chain management — where AI handles the operations and humans focus on patient care.
+    </p>
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    <div class="logo-footer">IX Medsolutions</div>
+    <p>Materials Management as a Service · Case Coverage as a Service</p>
+    <p style="margin-top: 8px; color: var(--text-dim); font-size: 0.75rem;">Confidential — For Authorized Recipients Only</p>
+  </div>
+</footer>
+
+<script>
+  // Reveal on scroll
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+      }
+    });
+  }, { threshold: 0.15, rootMargin: '0px 0px -50px 0px' });
+
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+  // Chat animation
+  function animateChat() {
+    const msgs = document.querySelectorAll('#chat-demo-1 .msg');
+    msgs.forEach((msg, i) => {
+      setTimeout(() => {
+        msg.classList.add('visible');
+      }, (i + 1) * 1500);
+    });
+  }
+
+  const chatObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        animateChat();
+        chatObserver.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.3 });
+
+  const chatDemo = document.getElementById('chat-demo-1');
+  if (chatDemo) chatObserver.observe(chatDemo);
+</script>
+</body>
+</html>
